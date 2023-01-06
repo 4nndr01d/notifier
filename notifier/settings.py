@@ -9,12 +9,25 @@ https://docs.djangoproject.com/en/4.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.1/ref/settings/
 """
-
+import os
 from pathlib import Path
+import environ
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+
+ROOT_DIR = (
+        environ.Path(__file__) - 2
+)
+
+env = environ.Env()
+
+READ_DOT_ENV_FILE = env.bool('DJANGO_READ_DOT_ENV_FILE', default=True)
+if READ_DOT_ENV_FILE:
+    env.read_env(str(ROOT_DIR.path('.env')))
+else:
+    raise Exception("Not found environment variables file: .env")
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
@@ -125,3 +138,6 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
+CELERY_BROKER_URL = os.environ.get('CELERY_BROKER_URL', "")
+CELERY_RESULT_BACKEND = os.environ.get('CELERY_RESULT_BACKEND', "")
+CELERY_TIMEZONE = TIME_ZONE

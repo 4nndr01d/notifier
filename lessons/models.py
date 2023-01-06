@@ -7,11 +7,11 @@ class Lesson(models.Model):
     classroom = models.CharField(verbose_name='Аудитория', max_length=50, blank=False)
 
     started_at = models.DateTimeField(verbose_name='Дата/Время начала', blank=False)
-    ended_at = models.DateTimeField(verbose_name='Дата/Время окончания', blank=False)
+    ended_at = models.TimeField(verbose_name='Время окончания', blank=False)
 
     class Meta:
         verbose_name = 'Урок'
         verbose_name_plural = 'Уроки'
 
     def __str__(self):
-        return f"Урок '{self.title}' в аудитории № {self.classroom} от {self.started_at}"
+        return f"Урок '{self.title}' в аудитории № {self.classroom} от {self.started_at.strftime('%m.%d.%Y %H:%M')} по {self.ended_at.strftime('%H:%M')}"
